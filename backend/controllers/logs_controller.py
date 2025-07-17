@@ -9,7 +9,7 @@ from utils.get_log_service import get_log_service
 router = APIRouter(prefix="/logs")
 
 
-@router.get("/", response_model=List[Log], status_code=status.HTTP_200_OK)
+@router.get("", response_model=List[Log], status_code=status.HTTP_200_OK)
 def read_logs(
     log_service: LogService = Depends(get_log_service)
 ):

@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from services.log_service import LogService
 from controllers.logs_controller import router as logs_router
 from controllers.math_controller import router as math_router
-from utils.get_log_service import get_log_service
+from utils.get_log_service import log_service_errors
 
 app = FastAPI(
     title="Math Microservice",
@@ -25,17 +25,22 @@ def root():
 async def handle_unreached_requests(
     request: Request, exc: StarletteHTTPException,
 ):
-    # Only log 404s (you could log all if you want)
+    # Only log 404s for now
+    result_ = {}
     if exc.status_code == 404:
-        log_service: LogService = get_log_service()
+        result_["detail"] = (
+            "You are looking for something that I can not give you"
+        )
+        log_service: LogService = log_service_errors()
         log_service.log_request(
             endpoint=request.url.path,
             operation=request.method,
             arguments="n/a",
-            result="404 Not Found",
+            result=result_["detail"],
             status_code=404
         )
+
     return JSONResponse(
         status_code=exc.status_code,
-        content={"detail": exc.detail},
+        content=result_
     )
