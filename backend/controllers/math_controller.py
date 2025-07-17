@@ -1,15 +1,22 @@
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from typing import Dict
+
+from fastapi import APIRouter, Depends, status
+
 from services.log_service import LogService
-from models.log_model import Log
-from models.database import Database
+from utils.get_log_service import get_log_service
 
 router = APIRouter(prefix="/math")
 
-@router.post("/pow", response_model=List[Log], status_code=status.HTTP_200_OK) 
-def math_power():
+
+@router.post(
+    "/pow", response_model=Dict[str, str],
+    status_code=status.HTTP_200_OK
+)
+def math_power(
+    log_service: LogService = Depends(get_log_service)
+):
     """Fake some math for test purposes"""
-    db = Database()
-    logger = LogService(db)
-    logger.log_request("/math/pow", "pow", "2, 3", "8", status.HTTP_200_OK)
-    return logger.read_logs()
+    log_service.log_request(
+        "/math/pow", "pow", "2, 3", "8", status.HTTP_200_OK
+    )
+    return {"result": "8"}
