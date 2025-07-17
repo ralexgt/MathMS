@@ -15,6 +15,10 @@ def start_server():
     run(["-m", "uvicorn", "main:app"])
 
 
+def test():
+    run(["-m", "pytest", "tests"])
+
+
 def lint():
     run(["-m", "flake8", ".", "--exclude=.venv,__pycache__,build,dist"])
 
@@ -30,6 +34,7 @@ def format_all():
 
 ACTIONS = {
     "start-server": start_server,
+    "test": test,
     "lint": lint,
     "sort-imports": sort_imports,
     "format": format_all,
@@ -37,6 +42,11 @@ ACTIONS = {
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in ACTIONS:
-        print("Usage: python tasks.py [start-server|lint|sort-imports|format]")
+        print("Usage:")
+        print("  py tasks.py start-server  # Start FastAPI server")
+        print("  py tasks.py test          # Run all tests in backend/tests")
+        print("  py tasks.py lint          # Lint with flake8")
+        print("  py tasks.py sort-imports  # Sort imports with isort")
+        print("  py tasks.py format        # Sort imports and lint")
         sys.exit(1)
     ACTIONS[sys.argv[1]]()
