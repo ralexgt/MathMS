@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Request
-from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from services.log_service import LogService
 from controllers.logs_controller import router as logs_router
 from controllers.math_controller import router as math_router
+from services.log_service import LogService
 from utils.get_log_service import log_service_errors
 
 app = FastAPI(
