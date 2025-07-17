@@ -1,7 +1,6 @@
 .PHONY: setup-unix setup-win setup-win-bash \
 		start-server lint sort-imports format
 
-
 # Setup for Linux/macOS 
 setup-unix:
 	cd backend && \
