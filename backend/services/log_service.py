@@ -2,6 +2,7 @@ from datetime import datetime
 
 from models.database import Database
 from models.log_model import Log
+from utils.logger import logger
 
 
 class LogService():
@@ -18,6 +19,10 @@ class LogService():
              datetime.now().isoformat())
         )
         self.db.connection.commit()
+        logger.info(
+            f"Logged request: {endpoint} {operation} {arguments} -> {result} "
+            f"Status: {status_code}"
+        )
 
     def read_logs(self, limit=100):
         logs = self.db.cursor.execute(
@@ -28,6 +33,7 @@ class LogService():
                 ORDER BY id DESC LIMIT ?""",
             (limit,)
         ).fetchall()
+        logger.info(f"Retrieved {len(logs)} logs from the database.")
 
         return [Log(
             id=log[0],
