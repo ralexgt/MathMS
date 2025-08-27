@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mathematics
+  labels:
+    app: mathematics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mathematics
+  template:
+    metadata:
+      labels:
+        app: mathematics
+    spec:
+      containers:
+        - name: api
+          image: mathematics:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mathematics
+  labels:
+    app: mathematics
+spec:
+  type: ClusterIP
+  selector:
+    app: mathematics
+  ports:
+    - name: http
+      port: 8080        # service port
+      targetPort: 8080  # container port
